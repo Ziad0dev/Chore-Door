@@ -29,17 +29,21 @@ const isClicked = (door) => {
     return true;
   }
 }
+let streak = 0;
+let bestStreak = 0;
+
 const playDoor = (door) => {
   numClosedDoors--;
+  // Reaching the bot only on the very last door counts as a win.
   if (numClosedDoors === 0) {
-   gameOver("win");
+    gameOver("win");
   } else if (isBot(door)) {
     gameOver();
   }
 }
 
 const randomChoreDoorGenerator = () => {
-  choreDoor = Math.floor(Math.random() * numClosedDoors);
+  const choreDoor = Math.floor(Math.random() * numClosedDoors);
   if (choreDoor === 0) {
     openDoor1 = botDoorPath;
     openDoor2 = beachDoorPath;
@@ -48,28 +52,28 @@ const randomChoreDoorGenerator = () => {
   	openDoor2 = botDoorPath;
   	openDoor1 = spaceDoorPath;
   	openDoor3 = beachDoorPath;
-} else { (choreDoor === 2)
+} else {
 		openDoor3 = botDoorPath;
     openDoor1 = beachDoorPath;
     openDoor2 = spaceDoorPath;
 }
 }
 
-door1.onclick = () => {
+doorImage1.onclick = () => {
   if (currentlyPlaying && !isClicked (doorImage1)) {
   doorImage1.src = openDoor1;
   playDoor(doorImage1);
 }
 }
 
-door2.onclick = () => {
+doorImage2.onclick = () => {
 	if (currentlyPlaying && !isClicked (doorImage2)) {
   doorImage2.src = openDoor2;
   playDoor(doorImage2);
 }
 }
 
-door3.onclick = () => {
+doorImage3.onclick = () => {
 	if (currentlyPlaying && !isClicked (doorImage3)) {
   doorImage3.src = openDoor3;
   playDoor(doorImage3);
@@ -84,9 +88,9 @@ startButton.onclick = () => {
 
 const startRound = () => {
   numClosedDoors = 3;
-  door1.src = closedDoorPath;
-  door2.src = closedDoorPath;
-  door3.src = closedDoorPath;
+  doorImage1.src = closedDoorPath;
+  doorImage2.src = closedDoorPath;
+  doorImage3.src = closedDoorPath;
   startButton.innerHTML = "Good Luck!";
   currentlyPlaying = true;
   randomChoreDoorGenerator();
@@ -94,10 +98,14 @@ const startRound = () => {
 
 const gameOver = (status) => {
   if (status === "win") {
+    streak++;
+    bestStreak = Math.max(bestStreak, streak);
     startButton.innerHTML = "You win! Play again?";
   } else {
+    streak = 0;
     startButton.innerHTML = "Game Over! Play again?"
   }
+  document.getElementById("streak").innerHTML = `Streak: ${streak} | Best: ${bestStreak}`;
   currentlyPlaying = false;
 }
 startRound();

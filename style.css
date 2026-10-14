@@ -52,3 +52,9 @@ body {
   margin-bottom: 21px;
   cursor: pointer;
 }
+
+.streak-row {
+  text-align: center;
+  font-family: 'Work Sans';
+  color: #00ffff;
+}
